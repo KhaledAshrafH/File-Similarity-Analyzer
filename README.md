@@ -8,22 +8,6 @@
 
 </div>
 
----
-
-## 📌 Table of Contents
-
-- [About The Project](#-about-the-project)
-- [Key Features](#-features)
-- [Technology Stack](#-technology-stack)
-- [Getting Started](#-getting-started)
-- [API Documentation](#-api-documentation)
-- [Project Structure](#-project-structure)
-- [Performance Metrics](#-performance)
-- [Contributing](#-contributing)
-- [License](#-license)
-
----
-
 ## 🎯 About The Project
 
 <div align="center">
@@ -93,5 +77,21 @@ In today's digital world, comparing documents for similarity is crucial for:
   <img src="https://img.shields.io/badge/Caffeine-3.1.8-FF6B6B?style=flat-square&logo=java&logoColor=white" />
   <img src="https://img.shields.io/badge/Lombok-1.18.30-BC2E20?style=flat-square&logo=lombok&logoColor=white" />
 </p>
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
