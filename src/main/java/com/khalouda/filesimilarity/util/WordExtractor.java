@@ -15,27 +15,27 @@ public class WordExtractor {
             return Set.of();
         Pattern pattern = Pattern.compile(WORD_REGEX);
 
-        Set<String> result = new HashSet<>();
+        Set<String> res=new HashSet<>();
         String lowerCaseOfText=text.toLowerCase();
         String[]words=pattern.split(lowerCaseOfText);
         for (String word:words) {
             if (!word.isEmpty()) {
-                if (word.length() > 1)
-                    result.add(word);
+                if (word.length()>1)
+                    res.add(word);
             }
         }
-        return result;
+        return res;
     }
 
     public double calculateSimilarity(Set<String> referenceWords, Set<String> targetWords) {
-        if (referenceWords.isEmpty()) {
+        if (referenceWords.isEmpty())
             return targetWords.isEmpty()?100.0:0.0;
-        }
 
         long cnt=0;
-        for (String word:referenceWords)
-            if (targetWords.contains(word))
+        for (String word:referenceWords) // O(n )
+            if (targetWords.contains(word)) // o(1)
                 cnt++;
-        return (double)(cnt/referenceWords.size())*100.0;
+        double res=((double) cnt/referenceWords.size())*100.0;
+        return Math.round(res*100.0)/100.0;
     }
 }

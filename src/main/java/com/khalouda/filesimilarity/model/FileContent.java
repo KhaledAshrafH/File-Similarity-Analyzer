@@ -12,9 +12,5 @@ public class FileContent {
     private String fileName;
     private String filePath;
     private Set<String> words;
-    private int totalWords;
-
-    public boolean hasWords() {
-        return words != null && !words.isEmpty();
-    }
+    private int numOfWords;
 }

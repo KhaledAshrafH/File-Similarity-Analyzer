@@ -29,18 +29,16 @@ public class FileReaderServiceImpl implements FileReaderService {
     @Cacheable(value = "fileContent", key = "#filePath")
     @Override
     public FileContent readFile(String filePath) {
-        log.info("Reading file: {}", filePath);
-
+        log.info("reading file: {}", filePath);
         try {
             Path path = Paths.get(filePath);
             if (!Files.exists(path))
-                throw new FileProcessingException("File not found: " + filePath);
+                throw new FileProcessingException("file not found: " + filePath);
 
             long fileSize=Files.size(path);
-            if (fileSize>appConfig.getMaxSizeBytes()) {
+            if (fileSize>appConfig.getMaxSizeInBytes()) {
                 throw new FileProcessingException(
-                        String.format("File too large: %d MB (max: %d MB)",
-                                fileSize / (1024*1024), appConfig.getMAX_SIZE_IN_MB())
+                        "File too large! (max: "+  appConfig.getMaxSizeMb() + " MB)"
                 );
             }
 
@@ -51,17 +49,18 @@ public class FileReaderServiceImpl implements FileReaderService {
                     .fileName(path.getFileName().toString())
                     .filePath(filePath)
                     .words(words)
-                    .totalWords(words.size())
+                    .numOfWords(words.size())
                     .build();
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new FileProcessingException("Error reading file: " + filePath, e);
         }
     }
 
     @Override
     public List<String> getTextFilesInDirectory(String directoryPath) {
-        log.info("scanning directory: {}", directoryPath);
+        log.info("reading files of directory: {}", directoryPath);
 
         try (Stream<Path> paths = Files.walk(Paths.get(directoryPath))) {
             List<String> files = paths
@@ -70,7 +69,7 @@ public class FileReaderServiceImpl implements FileReaderService {
                     .filter(string -> string.toLowerCase().endsWith(".txt"))
                     .collect(Collectors.toList());
 
-            log.info("Found {} text files", files.size());
+            log.info("found {} text files", files.size());
             return files;
 
         } catch (IOException e) {

@@ -21,7 +21,7 @@ public class FileSimilarityController {
 
         ComparisonResponse response = similarityService.compareFiles();
 
-        log.info("comparison completed successfully in {} ms", response.getExecutionTimeMs());
+        log.info("comparison completedd successfully in {} ms", response.getExecutionTime());
         return ResponseEntity.ok(response);
     }
 
@@ -31,7 +31,7 @@ public class FileSimilarityController {
             return ResponseEntity.badRequest().build();
 
         ComparisonResponse response = similarityService.getTopMatches(count);
-        log.info("Top {} Collected Successfully", count);
+        log.info("top {} collected successfully", count);
         return ResponseEntity.ok(response);
     }
 }

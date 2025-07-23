@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfig {
     private String referencePath;
     private String poolDirectory;
-    final private int MAX_SIZE_IN_MB = 5;
+    private int maxSizeMb;
 
-    public long getMaxSizeBytes() {
-        return MAX_SIZE_IN_MB * 1024L * 1024L;
+    public long getMaxSizeInBytes() {
+        return maxSizeMb * 1024L * 1024L;
     }
 }

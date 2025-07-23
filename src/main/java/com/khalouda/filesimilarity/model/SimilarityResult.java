@@ -8,12 +8,13 @@ import lombok.*;
 @Builder
 public class SimilarityResult  implements Comparable<SimilarityResult>{
     private String fileName;
-    private double similarityScore;
+    private double score;
     private int matchedWords;
     private int totalReferenceWords;
+    private String similarityPercentage;
 
     @Override
-   public int compareTo(SimilarityResult other) {
-        return Double.compare(other.similarityScore, this.similarityScore);
+    public int compareTo(SimilarityResult similarityResult) {
+        return Double.compare(similarityResult.score, this.score);
     }
 }

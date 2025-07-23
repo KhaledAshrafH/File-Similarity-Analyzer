@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -26,7 +27,7 @@ public class SimilarityServiceImpl implements SimilarityService {
     public ComparisonResponse compareFiles() {
         long startTime = System.currentTimeMillis();
 
-        log.info("Starting comparison process...");
+        log.info("starting comparison process ...");
         FileContent referenceFile = fileReaderService.readFile(appConfig.getReferencePath());
 
         List<String> poolFiles = fileReaderService.getTextFilesInDirectory(appConfig.getPoolDirectory());
@@ -45,25 +46,27 @@ public class SimilarityServiceImpl implements SimilarityService {
                         poolFile.getWords()
                 );
 
-                int matchedWords = (int) referenceFile.getWords().stream()
+                int matchedWords = (int)referenceFile.getWords().stream()
                         .filter(poolFile.getWords()::contains)
                         .count();
 
                 SimilarityResult result = SimilarityResult.builder()
                         .fileName(poolFile.getFileName())
-                        .similarityScore(similarity)
+                        .score(similarity)
                         .matchedWords(matchedWords)
-                        .totalReferenceWords(referenceFile.getTotalWords())
+                        .totalReferenceWords(referenceFile.getNumOfWords())
+                        .similarityPercentage(similarity+"%")
                         .build();
 
                 results.add(result);
 
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 log.error("Error processing file: {}", poolFilePath, e);
             }
         }
 
-        results.sort((a, b) -> Double.compare(b.getSimilarityScore(), a.getSimilarityScore()));
+        results.sort((a, b) -> Double.compare(b.getScore(), a.getScore()));
 
         long executionTime = System.currentTimeMillis() - startTime;
 
@@ -71,20 +74,20 @@ public class SimilarityServiceImpl implements SimilarityService {
                 .referenceFile(referenceFile.getFileName())
                 .totalFilesCompared(results.size())
                 .results(results)
-                .executionTimeMs(executionTime)
-                .bestMatch(results.isEmpty() ? "No matches found" : results.get(0).getFileName())
+                .executionTime(executionTime+" ms")
+                .bestMatch(results.isEmpty() ? "no matches found!":results.get(0).getFileName())
                 .build();
     }
 
     @Override
     public ComparisonResponse getTopMatches(int topN) {
-        ComparisonResponse fullResponse = compareFiles();
+        ComparisonResponse comparisonResponse=this.compareFiles();
 
-        List<SimilarityResult> topResults = fullResponse.getResults().stream()
+        List<SimilarityResult> topResults=comparisonResponse.getResults().stream()
                 .limit(topN)
-                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+                .collect(Collectors.toList());
 
-        fullResponse.setResults(topResults);
-        return fullResponse;
+        comparisonResponse.setResults(topResults);
+        return comparisonResponse;
     }
 }
